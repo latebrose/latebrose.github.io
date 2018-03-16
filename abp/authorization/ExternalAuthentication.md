@@ -22,7 +22,50 @@ LoginAsync会调用LoginAsyncInternal， LoginAsyncInternal调用TryLoginFromExt
 
 登录成功会保存本地副本
 
-![图片](https://raw.githubusercontent.com/latebrose/images/master/webside/abp/authorization/Snipaste_2018-03-16_12-28-39.jpg)
+``` CSharp
+using (var source = IocResolver.ResolveAsDisposable<IExternalAuthenticationSource<TTenant, TUser>>(sourceType))
+{
+    if (await source.Object.TryAuthenticateAsync(userNameOrEmailAddress, plainPassword, tenant))
+    {
+        var tenantId = tenant == null ? (int?)null : tenant.Id;
+        using (UnitOfWorkManager.Current.SetTenantId(tenantId))
+        {
+            var user = await UserManager.AbpStore.FindByNameOrEmailAsync(tenantId, userNameOrEmailAddress);
+            if (user == null)
+            {
+                user = await source.Object.CreateUserAsync(userNameOrEmailAddress, tenant);
+
+                user.TenantId = tenantId;
+                user.AuthenticationSource = source.Object.Name;
+                user.Password = UserManager.PasswordHasher.HashPassword(Guid.NewGuid().ToString("N").Left(16)); //Setting a random password since it will not be used
+
+                if (user.Roles == null)
+                {
+                    user.Roles = new List<UserRole>();
+                    foreach (var defaultRole in RoleManager.Roles.Where(r => r.TenantId == tenantId && r.IsDefault).ToList())
+                    {
+                        user.Roles.Add(new UserRole(tenantId, user.Id, defaultRole.Id));
+                    }
+                }
+
+                await UserManager.AbpStore.CreateAsync(user);
+            }
+            else
+            {
+                await source.Object.UpdateUserAsync(user, tenant);
+
+                user.AuthenticationSource = source.Object.Name;
+
+                await UserManager.AbpStore.UpdateAsync(user);
+            }
+
+            await UnitOfWorkManager.Current.SaveChangesAsync();
+
+            return true;
+        }
+    }
+}
+```
 
 ## 注册
 
