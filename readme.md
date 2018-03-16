@@ -14,7 +14,7 @@
 1. item2
     1. item 2a
 
-![图片](desert.jpg)
+![图片](https://raw.githubusercontent.com/latebrose/latebrose.github.io/master/Desert.jpg)
 
 [link](http://github.com)
 > 引用
