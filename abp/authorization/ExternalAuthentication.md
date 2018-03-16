@@ -2,7 +2,7 @@
 
 ## 登录
 
-Abp.Zero/Authorization/AbpLoginManager.cs中有两种类型的登录
+[Abp.Zero/Authorization/AbpLoginManager.cs](https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.Zero/Authorization/AbpLoginManager.cs)中有两种类型的登录
 
 1.  
 ``` CSharp
