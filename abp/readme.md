@@ -1,1 +1,1 @@
-[authorization](authorization)
+[authorization](./authorization)
