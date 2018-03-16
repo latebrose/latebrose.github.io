@@ -14,7 +14,7 @@
 1. item2
     1. item 2a
 
-![图片](https://avatars0.githubusercontent.com/u/23116409?s=460&v=4)
+![图片](desert.jpg)
 
 [link](http://github.com)
 > 引用
@@ -45,6 +45,7 @@ td1 | td2
 H~2~O
 
 Content [^1]
+
 [^1]: Footnote
 
 *[HTML]: hyper text markup language
