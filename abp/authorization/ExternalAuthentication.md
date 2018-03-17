@@ -4,19 +4,19 @@
 
 [Abp.Zero/Authorization/AbpLoginManager.cs](https://github.com/aspnetboilerplate/aspnetboilerplate/blob/dev/src/Abp.Zero/Authorization/AbpLoginManager.cs)中有两种类型的登录
 
-1.  
+1. OAuth登录
 ``` CSharp
 public virtual async Task<AbpLoginResult<TTenant, TUser>> LoginAsync(UserLoginInfo login, string tenancyName = null)
 ```
 
-2. 
+2. 用户密码登录
 ``` CSharp
 public virtual async Task<AbpLoginResult<TTenant, TUser>> LoginAsync(string userNameOrEmailAddress, string plainPassword, string tenancyName = null, bool shouldLockout = true)
 ```
 
 从UI进行登录使用的是第二种。
 
-LoginAsync会调用LoginAsyncInternal， LoginAsyncInternal调用TryLoginFromExternalAuthenticationSources，在方法中遍历所有已经注册的ExternalAuthenticationSource，并调用ExternalAuthenticationSource的TryAuthenticateAsync方法进行登录。
+LoginAsync会调用LoginAsyncInternal， LoginAsyncInternal中若本地登录失败，则调用TryLoginFromExternalAuthenticationSources，在方法中遍历所有已经注册的ExternalAuthenticationSource，并调用ExternalAuthenticationSource的TryAuthenticateAsync方法进行登录。
 
 ## 创建/更新本地副本
 
