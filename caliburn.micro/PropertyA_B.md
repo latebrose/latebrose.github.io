@@ -11,11 +11,13 @@
 #if !XFORMS
             foreach (var element in namedElements) {
                 var cleanName = element.Name.Trim('_');
+                // 以“_”作为分隔符，将A_B的属性分成A、B
                 var parts = cleanName.Split(new[] { '_' }, StringSplitOptions.RemoveEmptyEntries);
 
                 var property = viewModelType.GetPropertyCaseInsensitive(parts[0]);
                 var interpretedViewModelType = viewModelType;
 
+                // 如果在viewModel中没有找到A_B的属性，尝试在A属性中，寻找其子属性B
                 for (int i = 1; i < parts.Length && property != null; i++) {
                     interpretedViewModelType = property.PropertyType;
                     property = interpretedViewModelType.GetPropertyCaseInsensitive(parts[i]);
@@ -36,7 +38,7 @@
             var methods = viewModelType.GetMethods();
 #endif
             
-
+            // 直接使用viewModel中的方法进行匹配
             foreach (var method in methods) {
                 var foundControl = unmatchedElements.FindName(method.Name);
                 if (foundControl == null && IsAsyncMethod(method)) {
